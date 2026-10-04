@@ -500,14 +500,31 @@ def scan_attendance():
 @roles_required("organizer", "admin")
 def verify_ticket(token):
     reg = query(
-        "SELECT id FROM registrations WHERE token=?",
+        """
+        SELECT
+            r.id,
+            r.attended,
+            r.student_id,
+            e.title,
+            e.event_date,
+            u.name AS student_name
+        FROM registrations r
+        JOIN events e ON e.id = r.event_id
+        JOIN users u ON u.id = r.student_id
+        WHERE r.token = ?
+        """,
         (token,),
         one=True
     ) or abort(404)
 
-    reg = registration_for_manager(reg["id"])
+    # Do not allow attendance before the event date
+    if reg["event_date"] > date.today():
+        flash(
+            f"Attendance cannot be marked before the event date ({reg['event_date'].strftime('%d-%m-%Y')}).",
+            "error"
+        )
+        return render_template("verify.html", reg=reg)
 
-    # Automatically mark attendance
     if not reg["attended"]:
         execute(
             "UPDATE registrations SET attended=1 WHERE id=?",
@@ -531,7 +548,6 @@ def verify_ticket(token):
         )
 
     return render_template("verify.html", reg=reg)
-
 @app.route("/ticket/<int:reg_id>")
 @roles_required("student")
 def ticket(reg_id):
