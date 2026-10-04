@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Profile | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container narrow-container">
+    <div class="page-header"><div><span class="section-label">ACCOUNT</span><h1>My Profile</h1><p>Manage your account information.</p></div></div>
+    <div class="profile-card glass">
+        <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+        <h2>{{ user.name }}</h2><span class="role-badge">{{ user.role }}</span>
+        <form method="POST" class="profile-form">
+            <div class="form-group"><label>Name</label><input type="text" name="name" value="{{ user.name }}" required></div>
+            <div class="form-group"><label>Email</label><input type="email" value="{{ user.email }}" disabled></div>
+            <div class="form-group"><label>Department</label><input type="text" name="department" value="{{ user.department }}"></div>
+            <div class="form-group"><label>New Password <small>(leave blank to keep current)</small></label>
+                <input type="password" name="new_password" placeholder="••••••••"></div>
+            <button type="submit" class="btn btn-primary full-width">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

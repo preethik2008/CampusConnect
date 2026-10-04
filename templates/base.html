@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CampusConnect{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('index') }}" class="brand"><span class="brand-icon"><svg viewBox="0 0 40 40" width="26" height="26"><circle cx="22" cy="21" r="10" fill="#fff"/><circle cx="10" cy="9" r="4.5" fill="#fff" opacity=".85"/><circle cx="33" cy="9" r="4.5" fill="#fff" opacity=".85"/><circle cx="8" cy="29" r="6" fill="#fff" opacity=".9"/><circle cx="33" cy="30" r="4.5" fill="#fff" opacity=".85"/></svg></span><span>CampusConnect</span></a>
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">☰</button>
+        <nav class="nav-links" id="navLinks">
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('events') }}">Events</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                {% if session.get('role') == 'student' %}
+                    <a href="{{ url_for('my_events') }}">My Events</a>
+                {% elif session.get('role') in ('organizer', 'admin') %}
+                    <a href="{{ url_for('organizer_registrations') }}">Registrations</a>
+                    {% if session.get('role') == 'admin' %}<a href="{{ url_for('admin_users') }}">Users</a>{% endif %}
+                {% endif %}
+                <a href="{{ url_for('calendar') }}">Calendar</a>
+                <a href="{{ url_for('notifications') }}" class="notification-link">Notifications
+                    {% if unread_notifications > 0 %}<span class="notification-badge">{{ unread_notifications }}</span>{% endif %}
+                </a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('signup') }}" class="nav-signup">Create Account</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}"><span>{{ message }}</span>
+                    <button onclick="this.parentElement.remove()">×</button></div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div><strong>CampusConnect</strong><p>Campus Event Management System</p></div>
+        <div>© {{ current_year }} CampusConnect</div>
+    </div>
+</footer>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

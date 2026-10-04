@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Users | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header"><div><span class="section-label">ADMIN</span><h1>Users</h1><p>All registered accounts.</p></div></div>
+    <div class="table-card glass"><div class="table-wrapper"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Activity</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for u in users %}
+            <tr><td><strong>{{ u.name }}</strong></td><td>{{ u.email }}</td>
+                <td><span class="role-badge">{{ u.role }}</span></td><td>{{ u.department }}</td>
+                <td>{% if u.role == 'student' %}{{ u.reg_count }} registrations{% elif u.role == 'organizer' %}{{ u.event_count }} events{% else %}—{% endif %}</td>
+                <td>{% if u.id != session.get('user_id') %}
+                    <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" onsubmit="return confirm('Remove this user and their data?');">
+                        <button class="small-btn danger">Remove</button></form>{% else %}<small>You</small>{% endif %}</td></tr>
+        {% endfor %}
+        </tbody></table></div></div>
+</div>
+{% endblock %}

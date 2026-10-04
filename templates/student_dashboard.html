@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div><span class="section-label">STUDENT</span><h1>Welcome, {{ session.get('name') }}</h1>
+            <p>Discover and manage your campus events.</p></div>
+        <a href="{{ url_for('events') }}" class="btn btn-primary">Explore Events</a>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card glass"><span class="stat-icon">📅</span><span class="stat-number">{{ registered_count }}</span><span class="stat-label">Registered Events</span></div>
+        <div class="stat-card glass"><span class="stat-icon">🏆</span><span class="stat-number">{{ attended_count }}</span><span class="stat-label">Certificates Earned</span></div>
+        <div class="stat-card glass"><span class="stat-icon">🔔</span><span class="stat-number">{{ unread_notifications }}</span><span class="stat-label">Unread Notifications</span></div>
+    </div>
+    <section class="dashboard-section">
+        <div class="section-heading"><div><h2>Recommended Events</h2><p>Upcoming events you haven't registered for yet.</p></div>
+            <a href="{{ url_for('events') }}" class="text-link">View All →</a></div>
+        <div class="event-grid">
+            {% for event in upcoming_events %}{% include "_event_card.html" %}
+            {% else %}<div class="empty-state glass"><h3>No new events right now</h3><p>Check back soon.</p></div>{% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

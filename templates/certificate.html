@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Certificate - {{ reg.student_name }}</title>
+<style>
+ body{margin:0;background:#0b1020;font-family:Georgia,'Times New Roman',serif;display:flex;flex-direction:column;align-items:center;padding:30px;min-height:100vh;box-sizing:border-box}
+ .cert{width:min(980px,100%);aspect-ratio:1.414/1;background:#fffdf6;color:#1b2340;border:14px double #6aa32a;padding:50px 60px;box-sizing:border-box;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:10px}
+ .org{letter-spacing:6px;font-size:14px;color:#6aa32a;font-family:Arial,sans-serif;font-weight:700}
+ h1{font-size:50px;margin:6px 0;color:#1b2340}
+ .name{font-size:42px;font-style:italic;color:#0a7fb0;border-bottom:2px solid #6aa32a;display:inline-block;margin:10px auto;padding:0 40px}
+ p{font-size:18px;margin:4px 0;line-height:1.5}
+ .sign{display:flex;justify-content:space-around;margin-top:40px;font-family:Arial,sans-serif;font-size:13px}
+ .sign div{border-top:1px solid #1b2340;padding-top:6px;min-width:200px}
+ .actions{margin-top:20px;display:flex;gap:12px;font-family:Arial,sans-serif}
+ .actions a,.actions button{padding:11px 20px;border-radius:10px;border:0;background:#0a9ad6;color:#fff;font-weight:700;cursor:pointer;text-decoration:none;font-size:14px}
+ @media print{body{background:#fff;padding:0}.actions{display:none}.cert{width:100%}}
+</style></head>
+<body>
+<div class="cert">
+    <div class="org">CAMPUSCONNECT · CAMPUS EVENT MANAGEMENT</div>
+    <h1>Certificate of Participation</h1>
+    <p>This is proudly presented to</p>
+    <div><span class="name">{{ reg.student_name }}</span></div>
+    <p>of the Department of {{ reg.student_department }}</p>
+    <p>for attending the {{ reg.category|lower }} event</p>
+    <p><strong style="font-size:26px">{{ reg.title }}</strong></p>
+    <p>held on {{ reg.event_date|prettydate }} at {{ reg.venue }}</p>
+    <div class="sign"><div>{{ reg.organizer_name }}<br>Event Organizer</div><div>Campus Administration<br>CampusConnect</div></div>
+</div>
+<div class="actions"><button onclick="window.print()">Print / Save as PDF</button><a href="{{ url_for('dashboard') }}">← Back</a></div>
+</body></html>

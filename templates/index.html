@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}CampusConnect | Home{% endblock %}
+{% block content %}
+<section class="hero glass">
+    <div class="hero-content">
+        <div class="hero-badge">✦ CAMPUS EVENT MANAGEMENT</div>
+        <h1>Your Campus. <span>Your Events.</span> Your Experience.</h1>
+        <p>Discover campus events, register instantly with a QR ticket, track attendance and collect certificates — all in one place.</p>
+        <div class="hero-buttons">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('events') }}" class="btn btn-primary">Explore Events</a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">My Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('signup') }}" class="btn btn-primary">Get Started</a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+            {% endif %}
+        </div>
+        <div class="hero-stats">
+            <div><strong>{{ stats.events }}</strong><span>Events</span></div>
+            <div><strong>{{ stats.students }}</strong><span>Students</span></div>
+            <div><strong>{{ stats.registrations }}</strong><span>Registrations</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <div><span class="section-label">UPCOMING</span><h2>Featured Events</h2>
+            <p>Explore the latest events happening on campus.</p></div>
+        {% if session.get('user_id') %}<a href="{{ url_for('events') }}" class="text-link">View All →</a>{% endif %}
+    </div>
+    <div class="event-grid">
+        {% for event in events %}{% include "_event_card.html" %}
+        {% else %}<div class="empty-state glass"><h3>No events available</h3><p>New events will appear here soon.</p></div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="feature-grid">
+        <div class="glass feature"><span>🎟️</span><h3>QR Tickets</h3><p>Every registration comes with a scannable QR ticket.</p></div>
+        <div class="glass feature"><span>✅</span><h3>Attendance</h3><p>Organizers scan or tick attendance in one click.</p></div>
+        <div class="glass feature"><span>🏆</span><h3>Certificates</h3><p>Attended events unlock a printable certificate.</p></div>
+        <div class="glass feature"><span>🛡️</span><h3>Admin Approval</h3><p>Every event is reviewed before it goes live.</p></div>
+    </div>
+</section>
+{% endblock %}

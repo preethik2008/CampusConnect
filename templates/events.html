@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Events | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header"><div><span class="section-label">DISCOVER</span><h1>Campus Events</h1><p>Find events that match your interests.</p></div></div>
+    <form method="GET" action="{{ url_for('events') }}" class="filter-card glass">
+        <div class="filter-grid">
+            <div class="form-group"><label>Search</label><input type="text" name="search" value="{{ search }}" placeholder="Search events..."></div>
+            <div class="form-group"><label>Category</label>
+                <select name="category"><option value="">All Categories</option>
+                {% for c in categories %}<option value="{{ c }}" {% if selected_category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
+            <div class="form-group"><label>Department</label><input type="text" name="department" value="{{ selected_department }}" placeholder="IT"></div>
+            <div class="form-group"><button type="submit" class="btn btn-primary full-width">Search</button></div>
+        </div>
+    </form>
+    <div class="event-grid">
+        {% for event in events %}{% include "_event_card.html" %}
+        {% else %}<div class="empty-state glass"><div class="empty-icon">🔍</div><h3>No events found</h3><p>Try changing your search or filters.</p></div>{% endfor %}
+    </div>
+</div>
+{% endblock %}

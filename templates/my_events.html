@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}My Events | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header"><div><span class="section-label">MY EVENTS</span><h1>Registered Events</h1><p>Your tickets and certificates.</p></div>
+        <a href="{{ url_for('events') }}" class="btn btn-primary">Find More Events</a></div>
+    <div class="event-grid">
+        {% for event in events %}
+        <div class="event-card glass">
+            <div class="event-card-top"><span class="category-badge">{{ event.category }}</span>
+                {% if event.attended %}<span class="status-badge approved">Attended</span>
+                {% elif event.event_date < today %}<span class="status-badge cancelled">Missed</span>
+                {% else %}<span class="status-badge upcoming">Registered</span>{% endif %}</div>
+            <h3>{{ event.title }}</h3>
+            <p class="event-description">{{ event.description }}</p>
+            <div class="event-info"><div>📅 {{ event.event_date|prettydate }}</div><div>🕐 {{ event.event_time }}</div><div>📍 {{ event.venue }}</div></div>
+            <div class="card-actions">
+                <a href="{{ url_for('ticket', reg_id=event.reg_id) }}" class="btn btn-primary">🎟️ Ticket</a>
+                {% if event.attended %}<a href="{{ url_for('certificate', reg_id=event.reg_id) }}" class="btn btn-secondary">🏆 Certificate</a>
+                {% else %}<a href="{{ url_for('event_details', event_id=event.id) }}" class="btn btn-secondary">Details</a>{% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state glass"><div class="empty-icon">📅</div><h3>No registered events</h3><p>You haven't registered for any events yet.</p>
+            <a href="{{ url_for('events') }}" class="btn btn-primary">Explore Events</a></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <a href="{{ url_for('events') }}" class="back-link">← Back to Events</a>
+    <div class="details-layout">
+        <div class="details-card glass">
+            <div class="details-header">
+                <span class="category-badge">{{ event.category }}</span>
+                <div class="badge-row">
+                    <span class="status-badge {{ event.approval_status }}">{{ event.approval_status }}</span>
+                    <span class="status-badge {{ event.status }}">{{ event.status }}</span>
+                </div>
+            </div>
+            <h1>{{ event.title }}</h1>
+            <p class="details-description">{{ event.description }}</p>
+            <div class="details-info-grid">
+                <div class="info-box"><span>📅</span><div><small>Date</small><strong>{{ event.event_date|prettydate }}</strong></div></div>
+                <div class="info-box"><span>🕐</span><div><small>Time</small><strong>{{ event.event_time }}</strong></div></div>
+                <div class="info-box"><span>📍</span><div><small>Venue</small><strong>{{ event.venue }}</strong></div></div>
+                <div class="info-box"><span>🏫</span><div><small>Department</small><strong>{{ event.department }}</strong></div></div>
+            </div>
+        </div>
+        <aside class="details-card glass">
+            <h3>Registration</h3>
+            <div class="registration-count"><strong>{{ event.registered_count }}</strong><span> / {{ event.capacity }} registered</span></div>
+            <div class="progress"><div class="progress-fill" data-progress="{{ event|pct }}"></div></div>
+
+            {% if session.get('role') == 'student' %}
+                {% if registration %}
+                    <a href="{{ url_for('ticket', reg_id=registration.id) }}" class="btn btn-primary full-width">🎟️ View QR Ticket</a>
+                    {% if registration.attended %}
+                        <a href="{{ url_for('certificate', reg_id=registration.id) }}" class="btn btn-secondary full-width mt">🏆 Certificate</a>
+                    {% elif not is_past %}
+                        <form method="POST" action="{{ url_for('cancel_registration', event_id=event.id) }}" class="mt">
+                            <button type="submit" class="btn btn-danger full-width">Cancel Registration</button></form>
+                    {% endif %}
+                {% elif is_past %}<button class="btn btn-disabled full-width" disabled>Event Ended</button>
+                {% elif event.status == 'cancelled' %}<button class="btn btn-disabled full-width" disabled>Event Cancelled</button>
+                {% elif event.registered_count >= event.capacity %}<button class="btn btn-disabled full-width" disabled>Event Full</button>
+                {% else %}
+                    <form method="POST" action="{{ url_for('register_event', event_id=event.id) }}">
+                        <button type="submit" class="btn btn-primary full-width">Register Now</button></form>
+                {% endif %}
+            {% endif %}
+
+            {% if manage %}
+                <div class="manage-box">
+                    <a href="{{ url_for('organizer_registrations', event_id=event.id) }}" class="btn btn-secondary full-width">View Attendees</a>
+                    <a href="{{ url_for('edit_event', event_id=event.id) }}" class="btn btn-secondary full-width mt">Edit Event</a>
+                </div>
+            {% endif %}
+            <p class="organizer-text">Organized by <strong>{{ event.organizer_name }}</strong></p>
+        </aside>
+    </div>
+</div>
+{% endblock %}

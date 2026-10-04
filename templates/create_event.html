@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set page_title = "Edit Event" if edit_mode else "Create Event" %}
+{% block title %}{{ page_title }} | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container narrow-container">
+    <div class="page-header"><div><span class="section-label">{{ session.get('role')|upper }}</span><h1>{{ page_title }}</h1>
+        <p>{% if session.get('role') == 'admin' %}Admin events are published immediately.{% else %}New events are reviewed by an admin before going live.{% endif %}</p></div></div>
+    <div class="form-card glass">
+        <form method="POST">
+            <div class="form-group"><label for="title">Event Title</label>
+                <input type="text" id="title" name="title" value="{{ event.title if event else '' }}" placeholder="Enter event title" required></div>
+            <div class="form-group"><label for="description">Description</label>
+                <textarea id="description" name="description" rows="5" placeholder="Describe your event..." required>{{ event.description if event else '' }}</textarea></div>
+            <div class="form-row">
+                <div class="form-group"><label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select Category</option>
+                        {% for c in categories %}<option value="{{ c }}" {% if event and event.category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}
+                    </select></div>
+                <div class="form-group"><label for="department">Department</label>
+                    <input type="text" id="department" name="department" value="{{ event.department if event else 'All Departments' }}" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label for="event_date">Date</label>
+                    <input type="date" id="event_date" name="event_date" value="{{ event.event_date if event else '' }}" required></div>
+                <div class="form-group"><label for="event_time">Time</label>
+                    <input type="time" id="event_time" name="event_time" value="{{ event.event_time if event else '' }}" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label for="venue">Venue</label>
+                    <input type="text" id="venue" name="venue" value="{{ event.venue if event else '' }}" placeholder="Main Auditorium" required></div>
+                <div class="form-group"><label for="capacity">Capacity</label>
+                    <input type="number" id="capacity" name="capacity" min="1" value="{{ event.capacity if event else '' }}" placeholder="100" required></div>
+            </div>
+            {% if edit_mode %}
+            <div class="form-group"><label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="upcoming" {% if event.status == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                    <option value="cancelled" {% if event.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                </select></div>
+            {% endif %}
+            <div class="form-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">{{ 'Update Event' if edit_mode else 'Create Event' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

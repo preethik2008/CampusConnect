@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div><span class="section-label">ADMIN</span><h1>Admin Dashboard</h1><p>Review events and oversee the platform.</p></div>
+        <div class="header-actions"><a href="{{ url_for('create_event') }}" class="btn btn-primary">+ Create Event</a>
+            <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Manage Users</a></div>
+    </div>
+    <div class="stats-grid stats-4">
+        <div class="stat-card glass"><span class="stat-icon">👤</span><span class="stat-number">{{ stats.users }}</span><span class="stat-label">Users</span></div>
+        <div class="stat-card glass"><span class="stat-icon">📅</span><span class="stat-number">{{ stats.events }}</span><span class="stat-label">Events</span></div>
+        <div class="stat-card glass"><span class="stat-icon">🎟️</span><span class="stat-number">{{ stats.registrations }}</span><span class="stat-label">Registrations</span></div>
+        <div class="stat-card glass"><span class="stat-icon">⏳</span><span class="stat-number">{{ stats.pending }}</span><span class="stat-label">Pending Approval</span></div>
+    </div>
+
+    <section class="dashboard-section">
+        <div class="section-heading"><div><h2>Pending Approvals</h2><p>Approve events to publish them to students.</p></div></div>
+        <div class="table-card glass"><div class="table-wrapper"><table>
+            <thead><tr><th>Event</th><th>Organizer</th><th>Date</th><th>Venue</th><th>Capacity</th><th>Decision</th></tr></thead>
+            <tbody>
+            {% for event in pending %}
+                <tr>
+                    <td><strong>{{ event.title }}</strong><br><small>{{ event.category }}</small></td>
+                    <td>{{ event.organizer_name }}</td><td>{{ event.event_date|prettydate }}</td>
+                    <td>{{ event.venue }}</td><td>{{ event.capacity }}</td>
+                    <td><div class="table-actions">
+                        <a href="{{ url_for('event_details', event_id=event.id) }}" class="small-btn">View</a>
+                        <form method="POST" action="{{ url_for('review_event', event_id=event.id, action='approve') }}"><button class="small-btn success">Approve</button></form>
+                        <form method="POST" action="{{ url_for('review_event', event_id=event.id, action='reject') }}"><button class="small-btn danger">Reject</button></form>
+                    </div></td>
+                </tr>
+            {% else %}<tr><td colspan="6" class="table-empty">Nothing waiting for review. 🎉</td></tr>{% endfor %}
+            </tbody></table></div></div>
+    </section>
+
+    <section class="dashboard-section">
+        <div class="section-heading"><div><h2>All Events</h2><p>Every event on the platform.</p></div></div>
+        {% include "_events_table.html" %}
+    </section>
+</div>
+{% endblock %}

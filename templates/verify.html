@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Verify Ticket | CampusConnect{% endblock %}
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card glass">
+        <span class="section-label">TICKET VERIFIED</span>
+        <h1>{{ reg.student_name }}</h1>
+        <p class="auth-subtitle">{{ reg.student_email }} · {{ reg.student_department }}</p>
+        <div class="details-info-grid one-col">
+            <div class="info-box"><span>🎯</span><div><small>Event</small><strong>{{ reg.title }}</strong></div></div>
+            <div class="info-box"><span>📅</span><div><small>Date</small><strong>{{ reg.event_date|prettydate }}</strong></div></div>
+        </div>
+        <p class="ticket-name">{% if reg.attended %}<span class="status-badge approved">Already marked present</span>{% else %}<span class="status-badge pending">Not yet marked</span>{% endif %}</p>
+        <form method="POST" action="{{ url_for('toggle_attendance', reg_id=reg.id) }}" class="mt">
+            <button class="btn {{ 'btn-secondary' if reg.attended else 'btn-primary' }} full-width">
+                {{ 'Mark Absent' if reg.attended else '✔ Mark Present' }}</button></form>
+    </div>
+</section>
+{% endblock %}

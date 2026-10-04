@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}QR Ticket | CampusConnect{% endblock %}
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card glass ticket-card">
+        <span class="section-label">ENTRY TICKET</span>
+        <h1>{{ reg.title }}</h1>
+        <p class="auth-subtitle">{{ reg.event_date|prettydate }} · {{ reg.event_time }} · {{ reg.venue }}</p>
+        <div class="qr-box">{{ qr_svg|safe }}</div>
+        <p class="ticket-name">{{ session.get('name') }}</p>
+        <p class="auth-footer">Show this QR code at the venue entrance.</p>
+        <div class="card-actions center mt">
+            <a href="{{ url_for('my_events') }}" class="btn btn-secondary">← My Events</a>
+            <button class="btn btn-primary" onclick="window.print()">Print</button>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Registrations | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header"><div><span class="section-label">{{ session.get('role')|upper }}</span><h1>Registrations & Attendance</h1>
+        <p>Mark attendance to unlock certificates. Students can also be verified by scanning their QR ticket.</p></div></div>
+    <form method="GET" class="filter-card glass">
+        <div class="filter-grid filter-simple">
+            <div class="form-group"><label>Filter by event</label>
+                <select name="event_id" onchange="this.form.submit()"><option value="">All events</option>
+                {% for e in event_list %}<option value="{{ e.id }}" {% if selected_event == e.id %}selected{% endif %}>{{ e.title }}</option>{% endfor %}</select></div>
+        </div>
+    </form>
+    <div class="table-card glass"><div class="table-wrapper"><table>
+        <thead><tr><th>Student</th><th>Email</th><th>Dept</th><th>Event</th><th>Event Date</th><th>Registered</th><th>Attendance</th></tr></thead>
+        <tbody>
+        {% for r in registrations %}
+            <tr><td><strong>{{ r.student_name }}</strong></td><td>{{ r.student_email }}</td><td>{{ r.student_department }}</td>
+                <td>{{ r.event_title }}</td><td>{{ r.event_date|prettydate }}</td><td>{{ r.registered_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td><form method="POST" action="{{ url_for('toggle_attendance', reg_id=r.id) }}">
+                    {% if r.attended %}<button class="small-btn success">✔ Present</button>{% else %}<button class="small-btn">Mark Present</button>{% endif %}
+                </form></td></tr>
+        {% else %}<tr><td colspan="7" class="table-empty">No registrations yet.</td></tr>{% endfor %}
+        </tbody></table></div></div>
+</div>
+{% endblock %}

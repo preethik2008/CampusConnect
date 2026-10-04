@@ -1,0 +1,22 @@
+<div class="event-card glass">
+    <div class="event-card-top">
+        <span class="category-badge">{{ event.category }}</span>
+        {% if show_approval %}
+            <span class="status-badge {{ event.approval_status }}">{{ event.approval_status }}</span>
+        {% else %}
+            <span class="date-badge">{{ event.event_date|prettydate }}</span>
+        {% endif %}
+    </div>
+    <h3>{{ event.title }}</h3>
+    <p class="event-description">{{ event.description }}</p>
+    <div class="event-info">
+        <div>📅 {{ event.event_date|prettydate }}</div>
+        <div>🕐 {{ event.event_time }}</div>
+        <div>📍 {{ event.venue }}</div>
+    </div>
+    <div class="capacity-bar">
+        <div class="capacity-text">{{ event.registered_count }}/{{ event.capacity }} seats filled</div>
+        <div class="progress"><div class="progress-fill" data-progress="{{ event|pct }}"></div></div>
+    </div>
+    <a href="{{ url_for('event_details', event_id=event.id) }}" class="btn btn-primary full-width">View Details</a>
+</div>

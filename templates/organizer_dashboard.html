@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Organizer Dashboard | CampusConnect{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <span class="section-label">ORGANIZER</span>
+            <h1>Organizer Dashboard</h1>
+            <p>Manage your campus events and registrations.</p>
+        </div>
+
+        <a href="{{ url_for('create_event') }}" class="btn btn-primary">
+            + Create Event
+        </a>
+    </div>
+
+    <div class="stats-grid stats-4">
+
+        <div class="stat-card glass">
+            <span class="stat-icon">📅</span>
+            <span class="stat-number">{{ total_events }}</span>
+            <span class="stat-label">Total Events</span>
+        </div>
+
+        <div class="stat-card glass">
+            <span class="stat-icon">👥</span>
+            <span class="stat-number">{{ total_registrations }}</span>
+            <span class="stat-label">Registrations</span>
+        </div>
+
+        <div class="stat-card glass">
+            <span class="stat-icon">🎟️</span>
+            <span class="stat-number">{{ total_capacity }}</span>
+            <span class="stat-label">Total Capacity</span>
+        </div>
+
+        <div class="stat-card glass">
+            <span class="stat-icon">⏳</span>
+            <span class="stat-number">{{ pending }}</span>
+            <span class="stat-label">Awaiting Approval</span>
+        </div>
+
+    </div>
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Your Events</h2>
+                <p>Manage events created by you.</p>
+            </div>
+
+            <div>
+
+                <a href="{{ url_for('organizer_registrations') }}"
+                   class="text-link">
+                    View Registrations →
+                </a>
+
+                <a href="{{ url_for('scan_attendance') }}"
+                   class="text-link"
+                   style="margin-left: 20px;">
+                    📷 Scan QR Attendance →
+                </a>
+
+            </div>
+
+        </div>
+
+        {% include "_events_table.html" %}
+
+    </section>
+
+</div>
+{% endblock %}

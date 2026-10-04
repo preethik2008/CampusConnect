@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Login | CampusConnect{% endblock %}
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card glass">
+        <div class="auth-logo"><span class="brand-icon"><svg viewBox="0 0 40 40" width="26" height="26"><circle cx="22" cy="21" r="10" fill="#fff"/><circle cx="10" cy="9" r="4.5" fill="#fff" opacity=".85"/><circle cx="33" cy="9" r="4.5" fill="#fff" opacity=".85"/><circle cx="8" cy="29" r="6" fill="#fff" opacity=".9"/><circle cx="33" cy="30" r="4.5" fill="#fff" opacity=".85"/></svg></span></div>
+        <h1>Welcome Back</h1>
+        <p class="auth-subtitle">Login to your CampusConnect account</p>
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group"><label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required></div>
+            <div class="form-group"><label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required></div>
+            <button type="submit" class="btn btn-primary full-width">Login</button>
+        </form>
+        <div class="demo-box">
+            <strong>Demo accounts</strong>
+            <div><span>Admin</span> admin@kongu.edu / Admin@123</div>
+            <div><span>Organizer</span> events@kongu.edu / Organizer@123</div>
+            <div><span>Student</span> student@kongu.edu / Student@123</div>
+        </div>
+        <p class="auth-footer">Don't have an account? <a href="{{ url_for('signup') }}">Create Account</a></p>
+    </div>
+</section>
+{% endblock %}

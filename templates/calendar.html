@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Calendar | CampusConnect{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header"><div><span class="section-label">SCHEDULE</span><h1>Event Calendar</h1><p>Keep track of upcoming campus events.</p></div>
+        <div class="cal-nav">
+            <a href="{{ url_for('calendar', m=prev_m) }}" class="small-btn">←</a>
+            <strong>{{ month_label }}</strong>
+            <a href="{{ url_for('calendar', m=next_m) }}" class="small-btn">→</a>
+        </div></div>
+    <div class="calendar-grid glass">
+        {% for d in ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] %}<div class="cal-head">{{ d }}</div>{% endfor %}
+        {% for week in weeks %}{% for day in week %}
+            <div class="cal-cell {% if not day.in_month %}muted{% endif %} {% if day.date.isoformat() == today %}is-today{% endif %}">
+                <span class="cal-num">{{ day.date.day }}</span>
+                {% for e in day.events %}<a class="cal-event" href="{{ url_for('event_details', event_id=e.id) }}" title="{{ e.title }}">{{ e.event_time }} {{ e.title }}</a>{% endfor %}
+            </div>
+        {% endfor %}{% endfor %}
+    </div>
+    <div class="calendar-list">
+        {% for event in events %}
+        <div class="calendar-item glass">
+            <div class="calendar-date"><strong>{{ event.event_date[8:10] }}</strong><span>{{ event.event_date[5:7] }}/{{ event.event_date[0:4] }}</span></div>
+            <div class="calendar-content"><span class="category-badge">{{ event.category }}</span><h3>{{ event.title }}</h3>
+                <p>🕐 {{ event.event_time }} &nbsp;•&nbsp; 📍 {{ event.venue }}</p></div>
+            <a href="{{ url_for('event_details', event_id=event.id) }}" class="small-btn">View</a>
+        </div>
+        {% else %}<div class="empty-state glass"><h3>No events this month</h3></div>{% endfor %}
+    </div>
+</div>
+{% endblock %}
