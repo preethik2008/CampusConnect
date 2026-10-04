@@ -20,8 +20,10 @@
     <div class="calendar-list">
         {% for event in events %}
         <div class="calendar-item glass">
-            <div class="calendar-date"><strong>{{ event.event_date[8:10] }}</strong><span>{{ event.event_date[5:7] }}/{{ event.event_date[0:4] }}</span></div>
-            <div class="calendar-content"><span class="category-badge">{{ event.category }}</span><h3>{{ event.title }}</h3>
+<div class="calendar-date">
+    <strong>{{ event.event_date.strftime('%d') }}</strong>
+    <span>{{ event.event_date.strftime('%m/%Y') }}</span>
+</div>            <div class="calendar-content"><span class="category-badge">{{ event.category }}</span><h3>{{ event.title }}</h3>
                 <p>🕐 {{ event.event_time }} &nbsp;•&nbsp; 📍 {{ event.venue }}</p></div>
             <a href="{{ url_for('event_details', event_id=event.id) }}" class="small-btn">View</a>
         </div>
