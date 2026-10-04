@@ -198,23 +198,66 @@ def login():
 def signup():
     if session.get("user_id"):
         return redirect(url_for("dashboard"))
+
     if request.method == "POST":
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         role = request.form.get("role", "student")
         department = request.form.get("department", "").strip() or "IT"
+
         if role not in ("student", "organizer"):
             role = "student"
-        if not name or not email or len(password) < 6:
-            flash("Fill all fields. Password must be at least 6 characters.", "error")
-        elif query("SELECT id FROM users WHERE email=?", (email,), one=True):
-            flash("An account with this email already exists.", "error")
+
+        # Only Kongu Engineering College email addresses are allowed
+        if not name or not email:
+            flash("Please fill in all required fields.", "error")
+
+        elif not email.endswith("@kongu.edu"):
+            flash(
+                "Only Kongu Engineering College email addresses ending with @kongu.edu are allowed.",
+                "error"
+            )
+
+        elif len(password) < 6:
+            flash(
+                "Password must be at least 6 characters.",
+                "error"
+            )
+
+        elif query(
+            "SELECT id FROM users WHERE email=?",
+            (email,),
+            one=True
+        ):
+            flash(
+                "An account with this email already exists.",
+                "error"
+            )
+
         else:
-            execute("INSERT INTO users (name,email,password_hash,role,department) VALUES (?,?,?,?,?)",
-                    (name, email, generate_password_hash(password), role, department))
-            flash("Account created. Please log in.", "success")
+            execute(
+                "INSERT INTO users (name,email,password_hash,role,department) "
+                "VALUES (?,?,?,?,?)",
+                (
+                    name,
+                    email,
+                    generate_password_hash(
+                        password,
+                        method="pbkdf2:sha256"
+                    ),
+                    role,
+                    department
+                )
+            )
+
+            flash(
+                "Account created successfully. Please log in.",
+                "success"
+            )
+
             return redirect(url_for("login"))
+
     return render_template("signup.html")
 
 
@@ -481,16 +524,38 @@ def registration_for_manager(reg_id):
         abort(403)
     return reg
 
-
 @app.route("/attendance/<int:reg_id>", methods=["POST"])
 @roles_required("organizer", "admin")
 def toggle_attendance(reg_id):
     reg = registration_for_manager(reg_id)
+
+    # Do not allow attendance before the event date
+    if reg["event_date"] > date.today():
+        flash(
+            f"Attendance cannot be marked before the event date ({reg['event_date'].strftime('%d-%m-%Y')}).",
+            "error"
+        )
+        return redirect(request.referrer or url_for("organizer_registrations"))
+
     new = 0 if reg["attended"] else 1
-    execute("UPDATE registrations SET attended=? WHERE id=?", (new, reg_id))
+
+    execute(
+        "UPDATE registrations SET attended=? WHERE id=?",
+        (new, reg_id)
+    )
+
     if new:
-        notify(reg["student_id"], "Attendance recorded", f"Your attendance for '{reg['title']}' was recorded. Your certificate is ready in My Events.")
-    flash(f"{reg['student_name']} marked {'present' if new else 'absent'}.", "success")
+        notify(
+            reg["student_id"],
+            "Attendance recorded",
+            f"Your attendance for '{reg['title']}' was recorded. Your certificate is ready in My Events."
+        )
+
+    flash(
+        f"{reg['student_name']} marked {'present' if new else 'absent'}.",
+        "success"
+    )
+
     return redirect(request.referrer or url_for("organizer_registrations"))
 @app.route("/scan-attendance")
 @roles_required("organizer", "admin")
