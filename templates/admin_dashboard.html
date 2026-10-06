@@ -2,7 +2,11 @@
 {% block title %}Admin Dashboard | CampusConnect{% endblock %}
 {% block content %}
 <div class="page-container">
-    <div class="page-header">
+    <div class="dash-brand glass">
+        <img src="{{ url_for('static', filename='images/kec-logo.png') }}" alt="Kongu Engineering College">
+        <div><strong>Kongu Engineering College</strong><span>CampusConnect · Admin Dashboard</span></div>
+    </div>
+        <div class="page-header">
         <div><span class="section-label">ADMIN</span><h1>Admin Dashboard</h1><p>Review events and oversee the platform.</p></div>
         <div class="header-actions"><a href="{{ url_for('create_event') }}" class="btn btn-primary">+ Create Event</a>
             <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Manage Users</a></div>

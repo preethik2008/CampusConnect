@@ -2,7 +2,11 @@
 {% block title %}Student Dashboard | CampusConnect{% endblock %}
 {% block content %}
 <div class="page-container">
-    <div class="page-header">
+    <div class="dash-brand glass">
+        <img src="{{ url_for('static', filename='images/kec-logo.png') }}" alt="Kongu Engineering College">
+        <div><strong>Kongu Engineering College</strong><span>CampusConnect · Student Dashboard</span></div>
+    </div>
+        <div class="page-header">
         <div><span class="section-label">STUDENT</span><h1>Welcome, {{ session.get('name') }}</h1>
             <p>Discover and manage your campus events.</p></div>
         <a href="{{ url_for('events') }}" class="btn btn-primary">Explore Events</a>

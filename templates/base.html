@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<div class="bg-orb orb-1"></div>
-<div class="bg-orb orb-2"></div>
-<div class="bg-orb orb-3"></div>
 
 <header class="navbar">
     <div class="nav-container">
-        <a href="{{ url_for('index') }}" class="brand"><span class="brand-icon"><svg viewBox="0 0 40 40" width="26" height="26"><circle cx="22" cy="21" r="10" fill="#fff"/><circle cx="10" cy="9" r="4.5" fill="#fff" opacity=".85"/><circle cx="33" cy="9" r="4.5" fill="#fff" opacity=".85"/><circle cx="8" cy="29" r="6" fill="#fff" opacity=".9"/><circle cx="33" cy="30" r="4.5" fill="#fff" opacity=".85"/></svg></span><span>CampusConnect</span></a>
+        <a href="{{ url_for('index') }}" class="brand">
+            <img src="{{ url_for('static', filename='images/kec-logo.png') }}" alt="Kongu Engineering College" class="brand-logo">
+            <span class="brand-text"><strong>CampusConnect</strong><small>Campus Event Management</small></span>
+        </a>
         <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">☰</button>
         <nav class="nav-links" id="navLinks">
             <a href="{{ url_for('index') }}">Home</a>
@@ -56,7 +56,10 @@
 
 <footer class="footer">
     <div class="footer-container">
-        <div><strong>CampusConnect</strong><p>Campus Event Management System</p></div>
+        <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/kec-logo.png') }}" alt="Kongu Engineering College">
+            <div><strong>CampusConnect</strong><p>Campus Event Management System</p></div>
+        </div>
         <div>© {{ current_year }} CampusConnect</div>
     </div>
 </footer>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}CampusConnect | Home{% endblock %}
 {% block content %}
-<section class="hero glass">
+<section class="hero glass{% if not session.get('user_id') %} hero-campus{% endif %}">
     <div class="hero-content">
         <div class="hero-badge">✦ CAMPUS EVENT MANAGEMENT</div>
         <h1>Your Campus. <span>Your Events.</span> Your Experience.</h1>

@@ -1,29 +1,542 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><title>Certificate - {{ reg.student_name }}</title>
-<style>
- body{margin:0;background:#0b1020;font-family:Georgia,'Times New Roman',serif;display:flex;flex-direction:column;align-items:center;padding:30px;min-height:100vh;box-sizing:border-box}
- .cert{width:min(980px,100%);aspect-ratio:1.414/1;background:#fffdf6;color:#1b2340;border:14px double #6aa32a;padding:50px 60px;box-sizing:border-box;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:10px}
- .org{letter-spacing:6px;font-size:14px;color:#6aa32a;font-family:Arial,sans-serif;font-weight:700}
- h1{font-size:50px;margin:6px 0;color:#1b2340}
- .name{font-size:42px;font-style:italic;color:#0a7fb0;border-bottom:2px solid #6aa32a;display:inline-block;margin:10px auto;padding:0 40px}
- p{font-size:18px;margin:4px 0;line-height:1.5}
- .sign{display:flex;justify-content:space-around;margin-top:40px;font-family:Arial,sans-serif;font-size:13px}
- .sign div{border-top:1px solid #1b2340;padding-top:6px;min-width:200px}
- .actions{margin-top:20px;display:flex;gap:12px;font-family:Arial,sans-serif}
- .actions a,.actions button{padding:11px 20px;border-radius:10px;border:0;background:#0a9ad6;color:#fff;font-weight:700;cursor:pointer;text-decoration:none;font-size:14px}
- @media print{body{background:#fff;padding:0}.actions{display:none}.cert{width:100%}}
-</style></head>
-<body>
-<div class="cert">
-    <div class="org">CAMPUSCONNECT · CAMPUS EVENT MANAGEMENT</div>
-    <h1>Certificate of Participation</h1>
-    <p>This is proudly presented to</p>
-    <div><span class="name">{{ reg.student_name }}</span></div>
-    <p>of the Department of {{ reg.student_department }}</p>
-    <p>for attending the {{ reg.category|lower }} event</p>
-    <p><strong style="font-size:26px">{{ reg.title }}</strong></p>
-    <p>held on {{ reg.event_date|prettydate }} at {{ reg.venue }}</p>
-    <div class="sign"><div>{{ reg.organizer_name }}<br>Event Organizer</div><div>Campus Administration<br>CampusConnect</div></div>
+{% extends "base.html" %}
+
+{% block title %}Certificate | CampusConnect{% endblock %}
+
+{% block content %}
+
+<div class="certificate-page">
+
+    <div class="certificate">
+
+        <!-- KEC LOGO -->
+        <div class="certificate-logo">
+            <img
+                src="{{ url_for('static', filename='images/kec-logo.png') }}"
+                alt="Kongu Engineering College Logo"
+            >
+        </div>
+
+        <!-- HEADER -->
+        <div class="certificate-header">
+
+            <p class="certificate-small">
+                KONGU ENGINEERING COLLEGE
+            </p>
+
+            <h1>
+                CERTIFICATE OF PARTICIPATION
+            </h1>
+
+            <p class="certificate-subtitle">
+                This certificate is proudly presented to
+            </p>
+
+        </div>
+
+
+        <!-- STUDENT NAME -->
+        <div class="student-name">
+            {{ reg.student_name }}
+        </div>
+
+
+        <div class="certificate-line"></div>
+
+
+        <!-- DESCRIPTION -->
+        <p class="certificate-text">
+
+            for successfully participating in the event
+
+        </p>
+
+        <h2 class="event-name">
+            {{ reg.title }}
+        </h2>
+
+
+        <!-- EVENT DETAILS -->
+        <div class="certificate-details">
+
+            <div>
+                <strong>Date</strong>
+                <span>
+                    {{ reg.event_date.strftime('%d-%m-%Y') }}
+                </span>
+            </div>
+
+            <div>
+                <strong>Venue</strong>
+                <span>
+                    {{ reg.venue }}
+                </span>
+            </div>
+
+            <div>
+                <strong>Department</strong>
+                <span>
+                    {{ reg.student_department }}
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- SIGNATURES -->
+        <div class="certificate-signatures">
+
+            <div class="signature">
+
+                <div class="signature-line"></div>
+
+                <strong>
+                    Event Organizer
+                </strong>
+
+                <span>
+                    {{ reg.organizer_name }}
+                </span>
+
+            </div>
+
+
+            <div class="signature">
+
+                <div class="signature-line"></div>
+
+                <strong>
+                    Kongu Engineering College
+                </strong>
+
+                <span>
+                    CampusConnect
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="certificate-footer">
+
+            <span>
+                CampusConnect
+            </span>
+
+            <span>
+                Kongu Engineering College
+            </span>
+
+        </div>
+
+    </div>
+
 </div>
-<div class="actions"><button onclick="window.print()">Print / Save as PDF</button><a href="{{ url_for('dashboard') }}">← Back</a></div>
-</body></html>
+
+
+<style>
+
+.certificate-page {
+
+    padding: 40px 20px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 80vh;
+
+}
+
+
+.certificate {
+
+    width: 100%;
+
+    max-width: 950px;
+
+    min-height: 650px;
+
+    padding: 45px 60px;
+
+    background: white;
+
+    color: #17221c;
+
+    border: 12px solid #159447;
+
+    outline: 2px solid #0754b8;
+
+    outline-offset: -24px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.15);
+
+    text-align: center;
+
+    position: relative;
+
+}
+
+
+/* LOGO */
+
+.certificate-logo {
+
+    margin-bottom: 15px;
+
+}
+
+
+.certificate-logo img {
+
+    width: 190px;
+
+    height: auto;
+
+    object-fit: contain;
+
+}
+
+
+/* HEADER */
+
+.certificate-small {
+
+    color: #159447;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin: 5px 0 10px;
+
+}
+
+
+.certificate-header h1 {
+
+    color: #0754b8;
+
+    font-size: 34px;
+
+    letter-spacing: 2px;
+
+    margin: 5px 0 15px;
+
+}
+
+
+.certificate-subtitle {
+
+    color: #666;
+
+    font-size: 15px;
+
+}
+
+
+/* STUDENT NAME */
+
+.student-name {
+
+    margin-top: 25px;
+
+    color: #159447;
+
+    font-family: Georgia, serif;
+
+    font-size: 38px;
+
+    font-weight: bold;
+
+}
+
+
+.certificate-line {
+
+    width: 55%;
+
+    height: 2px;
+
+    margin: 8px auto 20px;
+
+    background: #0754b8;
+
+}
+
+
+/* TEXT */
+
+.certificate-text {
+
+    color: #555;
+
+    font-size: 15px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.event-name {
+
+    color: #17221c;
+
+    font-size: 25px;
+
+    margin: 5px 0 25px;
+
+}
+
+
+/* DETAILS */
+
+.certificate-details {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 60px;
+
+    margin: 25px 0 45px;
+
+}
+
+
+.certificate-details div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.certificate-details strong {
+
+    color: #159447;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+}
+
+
+.certificate-details span {
+
+    color: #333;
+
+    font-size: 13px;
+
+}
+
+
+/* SIGNATURES */
+
+.certificate-signatures {
+
+    display: flex;
+
+    justify-content: space-around;
+
+    gap: 80px;
+
+    margin-top: 30px;
+
+}
+
+
+.signature {
+
+    min-width: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.signature-line {
+
+    width: 210px;
+
+    height: 1px;
+
+    background: #333;
+
+    margin: 0 auto 8px;
+
+}
+
+
+.signature strong {
+
+    font-size: 13px;
+
+}
+
+
+.signature span {
+
+    color: #666;
+
+    font-size: 11px;
+
+}
+
+
+/* FOOTER */
+
+.certificate-footer {
+
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 60px;
+
+    right: 60px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    color: #159447;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+/* PRINT */
+
+@media print {
+
+    body {
+
+        background: white !important;
+
+    }
+
+
+    .main-header,
+    .site-footer,
+    .flash-container {
+
+        display: none !important;
+
+    }
+
+
+    .certificate-page {
+
+        padding: 0;
+
+        min-height: 100vh;
+
+    }
+
+
+    .certificate {
+
+        box-shadow: none;
+
+        max-width: none;
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .certificate {
+
+        padding: 35px 25px;
+
+        border-width: 8px;
+
+    }
+
+
+    .certificate-logo img {
+
+        width: 140px;
+
+    }
+
+
+    .certificate-header h1 {
+
+        font-size: 24px;
+
+    }
+
+
+    .student-name {
+
+        font-size: 28px;
+
+    }
+
+
+    .certificate-details {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+
+    .certificate-signatures {
+
+        flex-direction: column;
+
+        gap: 25px;
+
+        align-items: center;
+
+    }
+
+
+    .certificate-footer {
+
+        position: static;
+
+        margin-top: 30px;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
